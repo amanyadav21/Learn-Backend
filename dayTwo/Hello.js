@@ -3,24 +3,18 @@ const express = require('express')
 const app = express()
 
 app.get('/', (req, res) => {
-    res.end('This is Home section')
+    res.end('Home Page Section')
 })
 
-app.get('/home',(req, res) => {
-    res.end('This is New Home page section')
+app.get('/home/about', (req, res) => {
+    res.end('This is Home and -- About section bhia chal rha hai ku dek rhe hai')
 })
 
-app.get('/about',(req, res) => {
-    res.end('This is about section')
+app.get('/home/about/aman', (req, res) => {
+    res.end('Home -> About -> Aman✅')
 })
 
-app.get('/blog',(req, res) => {
-    res.end('This is Blog section at section')
-})
 
-app.get('/carrer', (req, res) => {
-    res.end('This is carrer section')
-})
 app.listen(3000, () => {
-    console.log('Port are Start Now')
+    console.log('this new server start now✅')
 })
