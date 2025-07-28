@@ -1,11 +1,14 @@
 import React from 'react'
 import FaceDetector from './FaceDetector'
+import ErrorBoundary from './components/ErrorBoundary'
 
 const App = () => {
   return (
-    <div>
-      <FaceDetector />
-    </div>
+    <ErrorBoundary>
+      <div>
+        <FaceDetector />
+      </div>
+    </ErrorBoundary>
   )
 }
 

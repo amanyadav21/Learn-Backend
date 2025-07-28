@@ -19,6 +19,20 @@ function uploadFile(file) {
             reject(new Error('No file provided'));
             return;
         }
+
+        // Validate file type
+        const allowedTypes = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg', 'video/mp4', 'video/mpeg'];
+        if (!allowedTypes.includes(file.mimetype)) {
+            reject(new Error('Invalid file type. Only audio and video files are allowed.'));
+            return;
+        }
+
+        // Validate file size (50MB limit)
+        const maxSize = 50 * 1024 * 1024; // 50MB in bytes
+        if (file.size > maxSize) {
+            reject(new Error('File too large. Maximum size is 50MB.'));
+            return;
+        }
         
         imagekit.upload({
             file: file.buffer,
@@ -26,7 +40,8 @@ function uploadFile(file) {
             folder: '/songs'
         }, (error, result) => {
             if (error) {
-                reject(error);
+                console.error('ImageKit upload error:', error);
+                reject(new Error('Failed to upload file to storage service'));
             } else {
                 resolve(result);
             }
