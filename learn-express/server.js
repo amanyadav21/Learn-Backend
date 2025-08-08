@@ -19,6 +19,9 @@ app.get('/item', (req, res) => {
     res.render("item")
 })
 
+app.get('/tempengine',(req, res) => {
+    res.render("tempengine", {name: "Bhai tera name hai - "})
+})
 
 
 
