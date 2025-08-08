@@ -1,0 +1,179 @@
+C
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Learnings with CSS</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:700&display=swap" rel="stylesheet" />
+
+    <style>
+        body {
+            background: #eee;
+            height: 100vh;
+        }
+
+        h3 {
+            padding: 15px 0px 0px 0px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 22.5px;
+            font-weight: bolder;
+        }
+
+        p {
+            margin: 0px 0px 10px 0px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-kerning: normal;
+            font-size: 15px;
+            font-weight: 100;
+            line-height: 2;
+            color: rgb(87, 87, 87);
+        }
+
+        span {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .checked {
+            color: green;
+        }
+
+        .black {
+            color: rgb(87, 87, 87);
+        }
+
+        .grey {
+            color: rgb(158, 158, 158);
+        }
+
+        .mainbod {
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            border-radius: 10px;
+            background: #ffffff;
+            width: 600px;
+            height: 270px;
+            box-shadow: 0px 5px 12px #dbdbdb;
+
+            display: flex;
+        }
+
+        .image {
+            border-radius: 10px 0 0 10px;
+            height: 100%;
+            width: 150px;
+            background-image: url("https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1000&amp;q=80");
+            background-size: cover;
+        }
+
+        .wrap {
+            flex: 1;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 20px 10px 20px;
+        }
+
+        .content h3 {
+            margin: 0;
+            margin-bottom: 5px;
+        }
+
+        .Ratings {
+            color: rgb(158, 158, 158);
+            padding: 20px 20px 10px 20px;
+        }
+
+        .Ratings p {
+            margin: 0;
+        }
+
+        .wrap2 {
+            display: flex;
+            height: 45%;
+            width: 450px;
+            border-bottom-right-radius: 10px;
+            justify-content: space-between;
+            background-color: rgb(237, 255, 233);
+        }
+
+        button {
+            font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            color: #475e1d;
+            background-color: #bada55;
+            border-radius: 8px;
+            border: 1px solid #bada55;
+            width: 140px;
+            height: 50px;
+            margin-right: 20px;
+            margin-top: 20px;
+            box-shadow: 0px 5px 12px #dbdbdb;
+        }
+
+        .wrap2container {
+            background-color: rgb(237, 255, 233);
+            height: 49%;
+            border-bottom-right-radius: 10px;
+        }
+
+        .terms {
+            margin-top: 20px;
+            margin-left: 20px;
+            font-size: 14px;
+            color: rgb(158, 158, 158);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mainbod">
+        <div class="box">
+            <div class="image"></div>
+            <div class="wrap">
+                <div class="content">
+                    <h3>Zambuza falls tour</h3>
+                    <p>
+                        Explore the Zambuza falls of mesopotamia with your family this
+                        summer.
+                    </p>
+                </div>
+                <div class="wrap2container">
+                    <div class="wrap2">
+                        <div class="Ratings">
+                            <p class="black"><span class="black">17</span> per person*</p>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            28 reviews
+                        </div>
+                        <button>Book Now</button>
+                    </div>
+                    <div class="conditions">
+                        <p class="terms">
+                            *For terms and conditions, contact support team.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
