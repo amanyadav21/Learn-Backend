@@ -23,7 +23,6 @@ app.get('/notes', (req, res) => {
 
 
 // DELETE /notes/:0
-
 app.delete('/notes/:index', (req, res) => {
     const index = req.params.index
     delete notes[index]
