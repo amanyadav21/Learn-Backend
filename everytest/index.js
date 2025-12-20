@@ -1,50 +1,68 @@
 const express = require("express");
-const { timeLog } = require("node:console");
-
-const app = express();
-
-app.use(express.json());
+const connectToDB = require('./src/db/db.js')
+const nodeModel = require('./src/models/note.model.js');
+const noteModel = require("./src/models/note.model.js");
 
 
-let notes = []
+
+const app = express()
+app.use(express.json())
 
 
-// POST Method - to send data frontent fo server(backend)
-app.post('/notes', (req, res) => {
-    console.log(req.body)
-    notes.push(req.body)
+app.post('/notes', async (req, res) => {
+    const {title, content} = req.body
+    console.log(title, content)
 
-    res.json({
-        message: "Note added sucessfully",
-        notes: notes
+    await noteModel.create({
+        title, content
     })
-})
-
-app.get('/notes', (req, res) => {
-    res.json(notes)
-})
-
-
-app.delete('/notes/:index', (req, res) => {
-    const index = req.params.index
-    delete notes[index]
     res.json({
-        message: "Bhai delete kar diya hai thik hai"
+        message: "Note created"
     })
 })
 
 
-app.patch('/notes/:index', (req, res) => {
-    const index = req.params.index
+
+
+app.get('/notes', async (req, res) => {
+    const notes = await noteModel.find({})
+
+    res.json({notes})
+})
+
+
+
+
+app.delete('/notes/:id', async(req, res) => {
+    const noteId = req.params.id
+    await noteModel.findByIdAndDelete({
+        _id: noteId
+    })
+
+    res.send({
+        message: "Delete ho gya hai"
+    })
+})
+
+
+app.patch('/notes/:id', async (req, res) => {
+    const noteId = req.params.id
     const {title} = req.body
-    
-    notes[index].title = title
+
+    await noteModel.findOneAndUpdate({
+        _id:noteId
+    }, {
+        title:title
+    })
 
     res.json({
-        message: "notes updated",
+        message: "Note updated sucessfully"
     })
 })
 
-app.listen(3000, () => {
-    console.log("server Is Running on Port 3000")
+connectToDB()
+
+
+app.listen(3000, (req, res) => {
+    console.log("Server is running on port 3000")
 })
