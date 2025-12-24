@@ -1,0 +1,12 @@
+:root {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  background-color: rgb(37, 37, 36);
+  color: white;
+}
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0; 
+}
+
