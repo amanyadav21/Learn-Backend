@@ -1,9 +1,11 @@
+/* =========================================
+   Global Reset & Layout
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 
 body {
     min-height: 100vh;
@@ -13,44 +15,115 @@ body {
     background: #6d6d6d;
 }
 
+/* =========================================
+   FacialExpression Styles
+   ========================================= */
 #main {
     background: bisque;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 16px;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 12px;
 }
 
-video {
+#main h1 {
+    color: #111;
+    padding: 6px 0;
+}
+
+#main h3 {
+    color: #222;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+#main video {
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+#main button {
+    background: #fff;
+    padding: 10px 16px;
     border-radius: 10px;
+    color: #111;
+    font-size: 0.95rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
 }
 
-
-button {
-    background: white;
-    padding: 10px;
-    border-radius: 10px;
-    color: black;
-    font-size: medium;
-}
-
-button:hover {
+#main button:hover {
     cursor: pointer;
     background: #000;
-    color: white;
+    color: #fff;
 }
 
-h1 {
-    color: black;
-    padding: 10px 0px;
+/* =========================================
+   Songs Styles
+   ========================================= */
+.songs {
+    width: 640px;
+    max-width: 90vw;
+    margin-top: 18px;
 }
 
-h3 {
-    color: #000;
-    font-weight: 300;
-    font-size: larger;
+.songs h2 {
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.song-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.8);
+    border-radius: 10px;
+}
+
+.song-item h3 {
+    color: #111;
+}
+
+.song-item p {
+    color: #555;
+}
+
+.song-link {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.song-link:hover {
+    text-decoration: underline;
+}
+
+.song-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-button {
+    background: transparent;
+    border: none;
+    padding: 6px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-button:hover {
+    background: rgba(0,0,0,0.08);
+    cursor: pointer;
 }
 
 

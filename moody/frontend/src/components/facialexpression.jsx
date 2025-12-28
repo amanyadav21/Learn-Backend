@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as faceapi from "face-api.js";
+import { Icon } from '@iconify/react'
 import './common.css'
 
 
@@ -83,6 +84,7 @@ return (
 
         <button onClick={detectMood}>
             Detect Mood
+            <Icon icon="material-symbols-light:line-end-arrow-notch" width="24" height="24" style={{ marginLeft: '8px' }} />
         </button>
 
         <h3>Mood: {emotion}</h3>
