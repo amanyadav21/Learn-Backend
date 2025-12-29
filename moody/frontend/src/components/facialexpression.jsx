@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as faceapi from "face-api.js";
 import { Icon } from '@iconify/react'
+import axios from 'axios'
 import './common.css'
 
 
-const FacialExpression = () => {
+const FacialExpression = ({ onMoodDetected, onSongsFetched }) => {
     // Step 1: Refs & States
 
     const videoRef = useRef(null);
@@ -31,7 +32,7 @@ const FacialExpression = () => {
         setModelsLoaded(true);
     };
 
-    // STEP 4 Detect Mood Fuction
+    // STEP 4 Detect Mood Function
 
     const detectMood = async () => {
         if(!modelsLoaded) {
@@ -61,7 +62,36 @@ const FacialExpression = () => {
             }
         }
 
-        setEmotion(detectedEmotion.toUpperCase());
+        const finalEmotion = detectedEmotion.toUpperCase();
+        setEmotion(finalEmotion);
+        onMoodDetected(finalEmotion); // Update parent component
+
+        // Step 5: Send emotion to backend via axios
+        try {
+            console.log("Sending mood to backend:", finalEmotion);
+            
+            const response = await axios.get('http://localhost:3000/songs', {
+                params: {
+                    mood: finalEmotion.toLowerCase()
+                }
+            });
+
+            console.log("Backend response:", response.data);
+            
+            // Pass songs data to parent component
+            if(response.data.songs && response.data.songs.length > 0) {
+                onSongsFetched(response.data.songs);
+                alert(`${finalEmotion} songs retrieved! Total: ${response.data.totalSongs}`);
+            } else {
+                onSongsFetched([]);
+                alert(`No songs found for ${finalEmotion} mood`);
+            }
+
+        } catch (error) {
+            console.error("Error sending emotion to backend:", error);
+            onSongsFetched([]); // Clear songs on error
+            alert("Failed to fetch songs for this mood");
+        }
     };
 
 useEffect(() => {
