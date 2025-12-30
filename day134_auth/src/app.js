@@ -1,8 +1,10 @@
 import express from "express"
 import authRoutes from "./routes/auth.routes.js";
+import cookieParser from "cookie-parser";
 
 const app = express()
-app.use(express.json())
+app.use(express.json()) // -- it is middleware
+app.use(cookieParser()) // -- it is middleware that used for store token in browser via server
 
 /*
 POST /auth/register
