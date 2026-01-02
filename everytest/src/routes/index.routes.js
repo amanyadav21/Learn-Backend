@@ -1,11 +1,10 @@
 import express from 'express'
 
-const router = express.Router();
+const router = express.Router()
+
 
 router.get('/', (req, res) => {
-    res.json({
-        message: "Server run kar rha hai bhai"
-    })
+    res.send("server is running now!")
 })
 
 
