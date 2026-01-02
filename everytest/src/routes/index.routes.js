@@ -7,5 +7,4 @@ router.get('/', (req, res) => {
     res.send("server is running now!")
 })
 
-
 export default router
