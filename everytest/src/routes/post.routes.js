@@ -4,6 +4,7 @@ import userModel from '../models/user.model.js'
 
 import authMiddleware from '../middlewares/auth.middleware.js'
 import multer from 'multer'
+import { createPostController } from '../controllers/post.controller.js'
 
 
 const router = express.Router()

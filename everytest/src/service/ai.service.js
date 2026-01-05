@@ -1,16 +1,29 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// The client gets the API key from the environment variable `GEMINI_API_KEY`.
-const ai = new GoogleGenAI({
-    apikay: ""
-});
+// Initialize with API key
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-async function main() {
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: "Explain how AI works in a few words",
-  });
-  console.log(response.text);
+
+async function generateCaption(base64ImageFile) {
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const result = await model.generateContent([
+      {
+        inlineData: {
+          mimeType: "image/png",
+          data: base64ImageFile,
+        },
+      },
+      "Caption this image. Keep it short and concise with hashtags and emojis.",
+    ]);
+
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("AI Service Error:", error.message);
+    throw error;
+  }
 }
 
-main();
+export default generateCaption
