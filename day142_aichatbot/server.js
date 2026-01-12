@@ -1,7 +1,10 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import app from "./src/app.js";
 
 import { createServer } from "http";
 import { Server } from "socket.io";
+import GenerateResponse from './src/service/ai.service.js';
 
 const httpServer = createServer();
 
@@ -18,9 +21,13 @@ io.on("connection", (socket) => {
       console.log("message reveived")
     })
 
-    socket.on("mama", () => {
-      console.log("Mama koh message mil gya")
+    socket.on("aimessage", async (data) => {
+        console.log("Received AI Message:", data.propmt);
+        const response = await GenerateResponse(data.propmt);
+        console.log("AI Response:", response)
+        socket.emit("Ai-message-response",{response})
     })
+
 });
 
 httpServer.listen(3000, () => {
