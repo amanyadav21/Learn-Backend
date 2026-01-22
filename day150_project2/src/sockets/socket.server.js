@@ -44,8 +44,8 @@ function initSocketServer(httpServer) {
 
         console.log("User Connected:", socket.user.email)
         console.log("New socket connection:", socket.id)
-        socket.on("ai-message", async(messagePayload) => {
-            console.log("AI Message Received", messagePayload)
+        socket.on("ai-message", async(messagePayload) => { 
+            console.log("AI Message Received", messagePayload) /* isme {chat id, content}  hota hai  */
 
             try {
                 // 1. User ka message database me save karo
@@ -56,8 +56,17 @@ function initSocketServer(httpServer) {
                     role: "user"
                 })
 
+                // 1.5. Chat history fetch karo (AI ko context dene ke liye)
+                const chatHistory = await messageModel.find({
+                    chat: messagePayload.chat
+                }) // Oldest first
+                
+
                 // 2. AI se response lo
-                const aiResponse = await aiService.getGroqChatCompletions(messagePayload.content)
+                const aiResponse = await aiService.getGroqChatCompletions(chatHistory.map(item => ({
+                    role: item.role,
+                    content: item.content
+                })))
                 console.log("AI Response:", aiResponse)
 
                 // 3. AI ka response bhi database me save karo

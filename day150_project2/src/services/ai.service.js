@@ -9,16 +9,11 @@ function getGroqClient() {
     return groq;
 }
 
-export async function getGroqChatCompletions(content) {
+export async function getGroqChatCompletions(messages) {
     const client = getGroqClient();
     try {
         const chatCompletion = await client.chat.completions.create({
-            messages: [
-                {
-                    role: "user",
-                    content: content
-                },
-            ],
+            messages: messages,
             model: "llama-3.3-70b-versatile",
         });
 
