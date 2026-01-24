@@ -4,6 +4,7 @@ import JWT from 'jsonwebtoken'
 import userModel from "../models/user.model.js";
 import aiService from "../services/ai.service.js";
 import messageModel from "../models/message.model.js";
+import { createMemory, queryMemory } from '../services/vector.service.js'
 
 /*
 Socket Server Setup:
@@ -65,6 +66,10 @@ function initSocketServer(httpServer) {
                     role: "user"  // Role "user" set kiya
                 })
                 console.log("📥 User message saved to DB")
+
+                const vectors = await aiService.generateVector(messagePayload.content)
+
+                console.log("Vectors generated:", vectors)
 
                 // STEP 1.5: Pichle 20 messages fetch karo (AI ka context hone ke liye)
                 const chatHistory = await messageModel.find({
