@@ -6,14 +6,15 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.27.0",
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
+    "@huggingface/inference": "^4.13.10",
     "@pinecone-database/pinecone": "^6.1.4",
     "bcryptjs": "^3.0.3",
     "cookie": "^1.1.1",
@@ -23,7 +24,7 @@
     "groq-sdk": "^0.37.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.4",
-    "openai": "^6.16.0",
+    "node-fetch": "^2.7.0",
     "socket.io": "^4.8.3"
   }
 }

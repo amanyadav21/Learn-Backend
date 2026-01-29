@@ -19,6 +19,10 @@ const messageSchema = new mongoose.Schema({
     // enum ka mbt ki isme se hi ek ki value hogi 
     enum: ["user", "assistant"],
     default: "user"
+   },
+   embedding: {
+       type: [Number], // Array of numbers (384 dimensions)
+       default: null
    }
 }, {
     timestamps: true 

@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      '@google/generative-ai':
-        specifier: ^0.24.1
-        version: 0.24.1
+      '@huggingface/inference':
+        specifier: ^4.13.10
+        version: 4.13.10
       '@pinecone-database/pinecone':
         specifier: ^6.1.4
         version: 6.1.4
@@ -38,18 +38,25 @@ importers:
       mongoose:
         specifier: ^9.1.4
         version: 9.1.4
-      openai:
-        specifier: ^6.16.0
-        version: 6.16.0(ws@8.18.3)
+      node-fetch:
+        specifier: ^2.7.0
+        version: 2.7.0
       socket.io:
         specifier: ^4.8.3
         version: 4.8.3
 
 packages:
 
-  '@google/generative-ai@0.24.1':
-    resolution: {integrity: sha512-MqO+MLfM6kjxcKoy0p1wRzG3b4ZZXtPI+z2IE26UogS2Cm/XHO+7gGRBh6gcJsOiIVoH93UwKvW4HdgiOZCy9Q==}
-    engines: {node: '>=18.0.0'}
+  '@huggingface/inference@4.13.10':
+    resolution: {integrity: sha512-aXVSXGNZqMnLxR4hbsxu2cgoY83EYUIc8bqC+5I5iRLqMlQb2E1g5Q+oIkZQQPLO7xfSSrjz2piZOVYF6Ia+og==}
+    engines: {node: '>=18'}
+
+  '@huggingface/jinja@0.5.4':
+    resolution: {integrity: sha512-VoQJywjpjy2D88Oj0BTHRuS8JCbUgoOg5t1UGgbtGh2fRia9Dx/k6Wf8FqrEWIvWK9fAkfJeeLB9fcSpCNPCpw==}
+    engines: {node: '>=18'}
+
+  '@huggingface/tasks@0.19.82':
+    resolution: {integrity: sha512-i8TzJb6Zk7KnYRL8unnYRuh/tW7ku3hJtQw972q/ZXvjkr/YIwWAAVxEfXuaj0vtCUbUljamJji6oWVG4+0PLQ==}
 
   '@mongodb-js/saslprep@1.4.4':
     resolution: {integrity: sha512-p7X/ytJDIdwUfFL/CLOhKgdfJe1Fa8uw9seJYvdOmnP9JBWGWHW69HkOixXS6Wy9yvGf1MbhcS6lVmrhy4jm2g==}
@@ -458,18 +465,6 @@ packages:
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
 
-  openai@6.16.0:
-    resolution: {integrity: sha512-fZ1uBqjFUjXzbGc35fFtYKEOxd20kd9fDpFeqWtsOZWiubY8CZ1NAlXHW3iathaFvqmNtCWMIsosCuyeI7Joxg==}
-    hasBin: true
-    peerDependencies:
-      ws: ^8.18.0
-      zod: ^3.25 || ^4.0
-    peerDependenciesMeta:
-      ws:
-        optional: true
-      zod:
-        optional: true
-
   parseurl@1.3.3:
     resolution: {integrity: sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==}
     engines: {node: '>= 0.8'}
@@ -621,7 +616,14 @@ packages:
 
 snapshots:
 
-  '@google/generative-ai@0.24.1': {}
+  '@huggingface/inference@4.13.10':
+    dependencies:
+      '@huggingface/jinja': 0.5.4
+      '@huggingface/tasks': 0.19.82
+
+  '@huggingface/jinja@0.5.4': {}
+
+  '@huggingface/tasks@0.19.82': {}
 
   '@mongodb-js/saslprep@1.4.4':
     dependencies:
@@ -1037,10 +1039,6 @@ snapshots:
   once@1.4.0:
     dependencies:
       wrappy: 1.0.2
-
-  openai@6.16.0(ws@8.18.3):
-    optionalDependencies:
-      ws: 8.18.3
 
   parseurl@1.3.3: {}
 

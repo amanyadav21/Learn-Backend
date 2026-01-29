@@ -46,76 +46,66 @@ function initSocketServer(httpServer) {
         console.log("✅ User Connected:", socket.user.email)
         console.log("📱 Socket ID:", socket.id)
         
-        // "ai-message" event listener - Frontend se message aata hai
+        // Frontend se AI message receive karo
         socket.on("ai-message", async(messagePayload) => { 
-            /*
-            messagePayload structure:
-            {
-                chat: "chatId",
-                content: "user ka message"
-            }
-            */
-            console.log("💬 AI Message Received:", messagePayload)
+            console.log("💬 Message Received:", messagePayload.content)
 
             try {
-                // STEP 1: User ka message database me save karo
+                // Vector generate karo
+                const vectors = await aiService.generateVector(messagePayload.content)
+                console.log(`✅ Vector generated: ${vectors.length} dimensions`)
+
+                // User ka message save karo with embedding
                 await messageModel.create({ 
                     chat: messagePayload.chat, 
                     user: socket.user._id, 
                     content: messagePayload.content, 
-                    role: "user"  // Role "user" set kiya
+                    role: "user",
+                    embedding: vectors  // Embedding save karo
                 })
-                console.log("📥 User message saved to DB")
+                console.log("💾 User message + embedding saved")
 
-                const vectors = await aiService.generateVector(messagePayload.content)
-
-                console.log("Vectors generated:", vectors)
-
-                // STEP 1.5: Pichle 20 messages fetch karo (AI ka context hone ke liye)
-                const chatHistory = await messageModel.find({
-                    chat: messagePayload.chat
-                }).sort({ createdAt: -1})  // Newest first
-                  .limit(20)                // Sirf 20 messages
-                  .lean()                   // Lean() - faster queries
-                  .reverse()                // Reverse karke oldest first banaya
+                // Pichle 20 messages fetch karo (context ke liye)
+                const chatHistory = await messageModel
+                    .find({ chat: messagePayload.chat })
+                    .sort({ createdAt: -1 })
+                    .limit(20)
+                    .sort({ createdAt: 1 })
                 
-                console.log("📚 Chat history fetched:", chatHistory.length, "messages")
+                console.log(`📚 Loaded ${chatHistory.length} messages`)
 
-                // STEP 2: AI service ko messages bhejo (Groq API call)
+                // Groq AI se response lo
                 const aiResponse = await aiService.getGroqChatCompletions(
                     chatHistory.map(item => ({
-                        role: item.role,        // "user" ya "assistant"
-                        content: item.content   // Message text
+                        role: item.role,
+                        content: item.content
                     }))
                 )
-                console.log("🤖 AI Response:", aiResponse)
+                console.log("🤖 AI Response:", aiResponse.substring(0, 50) + "...")
 
-                // STEP 3: AI ka response database me save karo
+                // AI response save karo
                 await messageModel.create({
                     chat: messagePayload.chat,
                     user: socket.user._id,
                     content: aiResponse,
-                    role: "assistant"  // Role "assistant" set kiya
+                    role: "assistant"
                 })
-                console.log("💾 AI message saved to DB")
 
-                // STEP 4: Frontend ko AI ka response bhejo (Socket emit)
+                // Frontend ko response bhejo
                 socket.emit("ai-response", { 
-                    response: aiResponse,       // AI ka jawab
-                    userId: socket.user._id,   // User ka ID
-                    chat: messagePayload.chat   // Chat ID
+                    response: aiResponse,
+                    userId: socket.user._id,
+                    chat: messagePayload.chat
                 })
-                console.log("📤 Response sent to frontend")
+                console.log("📤 Response sent!")
                 
             } catch (error) {
-                // Agar error aaye toh
-                console.error("❌ AI Service Error:", error)
-                // Frontend ko error message bhejo
+                console.error("❌ Error:", error.message)
                 socket.emit("ai-response", { 
-                    response: "Error occurred: " + error.message,
+                    response: "Sorry, something went wrong: " + error.message,
                     userId: socket.user._id,
                     chat: messagePayload.chat,
-                    error: true  // Error flag
+                    error: true
                 })
             }
         })
