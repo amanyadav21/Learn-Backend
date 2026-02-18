@@ -56,31 +56,75 @@ function initSocketServer(httpServer) {
                 console.log(`✅ Vector generated: ${vectors.length} dimensions`)
 
                 // User ka message save karo with embedding
-                await messageModel.create({ 
+                const userMessage = await messageModel.create({ 
                     chat: messagePayload.chat, 
                     user: socket.user._id, 
                     content: messagePayload.content, 
                     role: "user",
                     embedding: vectors  // Embedding save karo
                 })
-                console.log("💾 User message + embedding saved")
+                console.log("💾 User message + embedding saved in MongoDB")
 
-                // Pichle 20 messages fetch karo (context ke liye)
-                const chatHistory = await messageModel
+                // ⭐ PINECONE MEIN SAVE KARO ⭐
+                try {
+                    await createMemory({
+                        vectors: vectors,
+                        metadata: {
+                            messageId: userMessage._id.toString(),
+                            chatId: messagePayload.chat,
+                            userId: socket.user._id.toString(),
+                            role: "user",
+                            content: messagePayload.content
+                        },
+                        messageId: userMessage._id.toString()
+                    })
+                    console.log("🔺 ✅ Vector SAVED in PINECONE!")
+                } catch (pineconeErr) {
+                    console.error("🔺 ❌ PINECONE ERROR:", pineconeErr.message)
+                }
+
+                // 📟 SHORT-TERM MEMORY: Last 20 messages
+                const shortTermMemory = await messageModel
                     .find({ chat: messagePayload.chat })
                     .sort({ createdAt: -1 })
                     .limit(20)
                     .sort({ createdAt: 1 })
                 
-                console.log(`📚 Loaded ${chatHistory.length} messages`)
+                console.log(`📟 Short-term: ${shortTermMemory.length} messages`)
+
+                // 💾 LONG-TERM MEMORY: Similar vectors from Pinecone
+                let longTermMemory = []
+                try {
+                    const similarVectors = await queryMemory({
+                        queryVector: vectors,
+                        limit: 5
+                    })
+                    
+                    longTermMemory = similarVectors
+                        ?.filter(m => m.score > 0.7)
+                        ?.map(m => ({
+                            role: m.metadata?.role || "user",
+                            content: m.metadata?.content || ""
+                        })) || []
+                    
+                    console.log(`💾 Long-term: ${longTermMemory.length} relevant memories`)
+                } catch (err) {
+                    console.error("❌ Long-term error:", err.message)
+                }
+
+                // 🤖 Combine both memories for AI
+                const chatContext = [
+                    ...longTermMemory,
+                    ...shortTermMemory
+                ].map(item => ({
+                    role: item.role,
+                    content: item.content
+                }))
+
+                console.log(`📚 Total context: ${chatContext.length} messages`)
 
                 // Groq AI se response lo
-                const aiResponse = await aiService.getGroqChatCompletions(
-                    chatHistory.map(item => ({
-                        role: item.role,
-                        content: item.content
-                    }))
-                )
+                const aiResponse = await aiService.getGroqChatCompletions(chatContext)
                 console.log("🤖 AI Response:", aiResponse.substring(0, 50) + "...")
 
                 // AI response save karo
